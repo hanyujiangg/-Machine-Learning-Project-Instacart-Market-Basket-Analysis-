@@ -1,7 +1,11 @@
 # Machine Learning Project - Instacart Market Basket Analysis 
 The models make predictions on each user's next order items based on history orders 
 
-## Introduction 
+## Introduction
+This is a school project at Singapore Management University in 2020. 
+
+Authors: Bu Wende, Jiang Hanyu, Qi Haodi, Wang Yixing and Zhang Chengzi. 
+
 Our approach consists two parts: 
 1. Predict repurchased products using XGBoost 
 2. Predict new products with collaborative filtering
