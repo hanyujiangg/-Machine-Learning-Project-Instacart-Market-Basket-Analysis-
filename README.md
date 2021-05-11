@@ -21,7 +21,7 @@ Our approach consists two parts:
 
 ## Evaluation 
 evaluation metric used: Mean average precision
-![Screenshot 2021-05-11 at 12 40 08 PM](https://user-images.githubusercontent.com/35590255/117759239-070a9e00-b256-11eb-9ecf-f7a99be8d983.jpg =250x)
+![Screenshot 2021-05-11 at 12 40 08 PM](https://user-images.githubusercontent.com/35590255/117759239-070a9e00-b256-11eb-9ecf-f7a99be8d983.jpg)
 
 The recommendation consists of top 5 products from part 1 (reordered) and top 3 new products from part 2. 
 The test performance is 47.32%, indicating that with our models, the user will purchase every second product recommended on average.
