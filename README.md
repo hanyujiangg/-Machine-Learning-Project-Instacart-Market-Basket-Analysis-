@@ -22,6 +22,9 @@ As such, the data is split as the following: <ul>
   <li>Train set is used as the test set for final evaluation</li>
 </ul>
 
+## Evaluation 
+Evaluation metric used: Mean average precision (mAP)
+
 ## Predict repurchased products using XGBoost
 ### Features 
 - Total buy 
@@ -29,21 +32,29 @@ As such, the data is split as the following: <ul>
 - Chance and Ratio 
 
 ## Predict new products with collaborative filtering
-### Models 
+We explored four different approaches for collaborative filtering to predict new products purchased by users:
 - TF-IDF
-- Probabilistic matrix factorization 
-- Non-negative matrix factorization
+- Probabilistic matrix factorization (PMF)
+- Non-negative matrix factorization (NMF)
 - NMF with co-clustering 
 
-## Evaluation 
-evaluation metric used: Mean average precision
-![Screenshot 2021-05-11 at 12 40 08 PM](https://user-images.githubusercontent.com/35590255/117759239-070a9e00-b256-11eb-9ecf-f7a99be8d983.jpg)
+### TFIDF
+This approach adapts from the project done by <a href='http://cs229.stanford.edu/proj2020spr/report/Qian_Xu_You.pdf'>Kun, Xu and You</a>, where each user is treated as a document and each product is treated as a word. With TF-IDF vectors constructed, we are able to find similar users and believe they would have similar preferences and needs to recommend new products that are purchased by some to those who did not purchase before.
 
+### PMF
+We factorize the original matrix _R_, that contains _M_ products and _N_ users into latent matrices _U_ (NxK) and _V_ (MxK) where K is the number of latent factors. The original matrix _R_ is first normalized with _(x-1)/(X-1)_ where _X_ is the maximum number of purchases by a user on a product in _R_, to avoid non-convergence. Stochastic Gradient Descend is used for optimization. The performance is very poor with extremely low mAP values even after tuning.
+
+### NMF
+We employed the Scikit-Learn NMF module to factorize the matrix _R_ into _U_ and _V_. 
+
+### Co-Clustering
+As users and products are two key entities that co-exist in our case, we employed co-clustering to find clusters with both similar users and products, with <a href='https://coclust.readthedocs.io/en/v0.2.1/'>CoClust package</a>. Given a user id, we can obtain the corresponding user cluster, followed by the best user-product cluster based on _delta_kl_ value. NMF is done on the selected best user-product cluster.
+
+One possible reason is the lack of products in the user-product cluster and therefore we explored using the user cluster with all products. However, the performance drops to 0% for some unknown reasons.
+
+## Final Model
 The recommendation consists of top 5 products from part 1 (reordered) and top 3 new products from part 2. 
 The test performance is 47.32%, indicating that with our models, the user will purchase every second product recommended on average.
-
-## Content 
-This repo contains source code for XGBoost model to predict repurchased products and project report. Please refer to the report for further details. 
 
 ## Reference 
 - Instacart Market Basket Analysis Kaggle competition, including detailed requirements and data:
