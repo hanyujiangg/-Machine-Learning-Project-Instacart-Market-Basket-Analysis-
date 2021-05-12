@@ -25,6 +25,9 @@ As such, the data is split as the following: <ul>
 ## Evaluation 
 Evaluation metric used: Mean average precision (mAP)
 
+## Baseline
+The baseline is to use the most popular 10 products as recommendation, with an mAP value of 22%.
+
 ## Predict repurchased products using XGBoost
 ### Features 
 - Total buy 
@@ -39,16 +42,16 @@ We explored four different approaches for collaborative filtering to predict new
 - NMF with co-clustering 
 
 ### TFIDF
-This approach adapts from the project done by <a href='http://cs229.stanford.edu/proj2020spr/report/Qian_Xu_You.pdf'>Kun, Xu and You</a>, where each user is treated as a document and each product is treated as a word. With TF-IDF vectors constructed, we are able to find similar users and believe they would have similar preferences and needs to recommend new products that are purchased by some to those who did not purchase before.
+This approach adapts from the project done by <a href='http://cs229.stanford.edu/proj2020spr/report/Qian_Xu_You.pdf'>Kun, Xu and You</a>, where each user is treated as a document and each product is treated as a word. With TF-IDF vectors constructed, we are able to find similar users and believe they would have similar preferences and needs to recommend new products that are purchased by some to those who did not purchase before. The test performance is 32.4% mAP, using 4 most similar users and the top 10 popular item among them.
 
 ### PMF
 We factorize the original matrix _R_, that contains _M_ products and _N_ users into latent matrices _U_ (NxK) and _V_ (MxK) where K is the number of latent factors. The original matrix _R_ is first normalized with _(x-1)/(X-1)_ where _X_ is the maximum number of purchases by a user on a product in _R_, to avoid non-convergence. Stochastic Gradient Descend is used for optimization. The performance is very poor with extremely low mAP values even after tuning.
 
 ### NMF
-We employed the Scikit-Learn NMF module to factorize the matrix _R_ into _U_ and _V_. 
+We employed the Scikit-Learn NMF module to factorize the matrix _R_ into _U_ and _V_. The test performance is 50.57% mAP.
 
 ### Co-Clustering
-As users and products are two key entities that co-exist in our case, we employed co-clustering to find clusters with both similar users and products, with <a href='https://coclust.readthedocs.io/en/v0.2.1/'>CoClust package</a>. Given a user id, we can obtain the corresponding user cluster, followed by the best user-product cluster based on _delta_kl_ value. NMF is done on the selected best user-product cluster.
+As users and products are two key entities that co-exist in our case, we employed co-clustering to find clusters with both similar users and products, with <a href='https://coclust.readthedocs.io/en/v0.2.1/'>CoClust package</a>. Given a user id, we can obtain the corresponding user cluster, followed by the best user-product cluster based on _delta_kl_ value. NMF is done on the selected best user-product cluster. The test performance drops to 37.51% mAP
 
 One possible reason is the lack of products in the user-product cluster and therefore we explored using the user cluster with all products. However, the performance drops to 0% for some unknown reasons.
 
